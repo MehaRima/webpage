@@ -3,8 +3,8 @@
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
-	color: #782;
-	background-color: #FaFaFa;
+	color: #292;
+	background-color: #FaFbFa;
 	text-align: center;
 	line-height: 1.4em;
 }
@@ -29,10 +29,10 @@ h3 {
   margin: 15px auto;
 }
 code {
-  font-family: times new;
+  font-family: monospace;
   padding: 2px;
   color: black;
-  background-color: #fif;
+  background-color: #fff;
 }
 ol {
 	list-style-position: outside;
@@ -49,5 +49,5 @@ li {
 }
 
 a {
-	color: #2924A9;
+	color: #2974A9;
 }
