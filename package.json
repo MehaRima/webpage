@@ -1,5 +1,5 @@
 {
-	"name": "request_header",
+	"name": "shorturl",
 	"version": "0.0.1",
 	"description": "API project for freeCodeCamp",
 	"main": "server.js",
@@ -8,7 +8,10 @@
 	},
 	"dependencies": {
 		"express": "^5.0.0-alpha.2",
-		"cors": "^2.8.1"
+		"mongodb": "^2.2.5",
+		"mongoose": "^4.5.7",
+		"cors": "^2.8.1",
+		"body-parser": "^1.15.2"
 	},
 	"engines": {
 		"node": "4.4.5"
