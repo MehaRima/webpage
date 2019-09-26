@@ -1,37 +1,32 @@
-'use strict';
+// server.js
+// where your node app starts
 
+// init project
 var express = require('express');
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
-
-var cors = require('cors');
-
 var app = express();
 
-// Basic Configuration 
-var port = process.env.PORT || 3000;
+// enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+// so that your API is remotely testable by FCC 
+var cors = require('cors');
+app.use(cors({optionSuccessStatus: 200}));  // some legacy browsers choke on 204
 
-/** this project needs a db !! **/ 
-// mongoose.connect(process.env.MONGOLAB_URI);
+// http://expressjs.com/en/starter/static-files.html
+app.use(express.static('public'));
 
-app.use(cors());
-
-/** this project needs to parse POST bodies **/
-// you should mount the body-parser here
-
-app.use('/public', express.static(process.cwd() + '/public'));
-
-app.get('/', function(req, res){
-  res.sendFile(process.cwd() + '/views/index.html');
+// http://expressjs.com/en/starter/basic-routing.html
+app.get("/", function (req, res) {
+  res.sendFile(__dirname + '/views/index.html');
 });
 
-  
+
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
 
-app.listen(port, function () {
-  console.log('Node.js listening ...');
+
+// listen for requests :)
+var listener = app.listen(process.env.PORT, function () {
+  console.log('Your app is listening on port ' + listener.address().port);
 });
