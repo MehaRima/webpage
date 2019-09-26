@@ -9,22 +9,33 @@
 'use strict';
 
 var expect = require('chai').expect;
-var ConvertHandler = require('../controllers/convertHandler.js');
+var MongoClient = require('mongodb');
+var ObjectId = require('mongodb').ObjectID;
+
+const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
 
 module.exports = function (app) {
-  
-  var convertHandler = new ConvertHandler();
 
-  app.route('/api/convert')
+  app.route('/api/issues/:project')
+  
     .get(function (req, res){
-      var input = req.query.input;
-      var initNum = convertHandler.getNum(input);
-      var initUnit = convertHandler.getUnit(input);
-      var returnNum = convertHandler.convert(initNum, initUnit);
-      var returnUnit = convertHandler.getReturnUnit(initUnit);
-      var toString = convertHandler.getString(initNum, initUnit, returnNum, returnUnit);
+      var project = req.params.project;
       
-      //res.json
+    })
+    
+    .post(function (req, res){
+      var project = req.params.project;
+      
+    })
+    
+    .put(function (req, res){
+      var project = req.params.project;
+      
+    })
+    
+    .delete(function (req, res){
+      var project = req.params.project;
+      
     });
     
 };

@@ -14,47 +14,96 @@ var server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
-
-  suite('Routing Tests', function() {
-    
-    suite('GET /api/convert => conversion object', function() {
+  
+    suite('POST /api/issues/{project} => object with issue data', function() {
       
-      test('Convert 10L (valid input)', function(done) {
+      test('Every field filled in', function(done) {
        chai.request(server)
-        .get('/api/convert')
-        .query({input: '10L'})
+        .post('/api/issues/test')
+        .send({
+          issue_title: 'Title',
+          issue_text: 'text',
+          created_by: 'Functional Test - Every field filled in',
+          assigned_to: 'Chai and Mocha',
+          status_text: 'In QA'
+        })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.equal(res.body.initNum, 10);
-          assert.equal(res.body.initUnit, 'L');
-          assert.approximately(res.body.returnNum, 2.64172, 0.1);
-          assert.equal(res.body.returnUnit, 'gal');
+          
+          //fill me in too!
+          
           done();
         });
       });
       
-      test('Convert 32g (invalid input unit)', function(done) {
+      test('Required fields filled in', function(done) {
         
-        //done();
       });
       
-      test('Convert 3/7.2/4kg (invalid number)', function(done) {
+      test('Missing required fields', function(done) {
         
-        //done();
-      });  
-      
-      test('Convert 3/7.2/4kilomegagram (invalid number and unit)', function(done) {
-        
-        //done();
-      });
-      
-      test('Convert kg (no number)', function(done) {
-        
-        //done();
       });
       
     });
-
-  });
+    
+    suite('PUT /api/issues/{project} => text', function() {
+      
+      test('No body', function(done) {
+        
+      });
+      
+      test('One field to update', function(done) {
+        
+      });
+      
+      test('Multiple fields to update', function(done) {
+        
+      });
+      
+    });
+    
+    suite('GET /api/issues/{project} => Array of objects with issue data', function() {
+      
+      test('No filter', function(done) {
+        chai.request(server)
+        .get('/api/issues/test')
+        .query({})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body);
+          assert.property(res.body[0], 'issue_title');
+          assert.property(res.body[0], 'issue_text');
+          assert.property(res.body[0], 'created_on');
+          assert.property(res.body[0], 'updated_on');
+          assert.property(res.body[0], 'created_by');
+          assert.property(res.body[0], 'assigned_to');
+          assert.property(res.body[0], 'open');
+          assert.property(res.body[0], 'status_text');
+          assert.property(res.body[0], '_id');
+          done();
+        });
+      });
+      
+      test('One filter', function(done) {
+        
+      });
+      
+      test('Multiple filters (test for multiple fields you know will be in the db for a return)', function(done) {
+        
+      });
+      
+    });
+    
+    suite('DELETE /api/issues/{project} => text', function() {
+      
+      test('No _id', function(done) {
+        
+      });
+      
+      test('Valid _id', function(done) {
+        
+      });
+      
+    });
 
 });
