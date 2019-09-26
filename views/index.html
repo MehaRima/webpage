@@ -12,46 +12,84 @@
   <body>
     <header>
       <h1>
-        ISQA_5 - Nasdaq Stock Price Checker
+        ISQA_3 - Anon Message Board
       </h1>
     </header>
     <div id='userstories' style='margin-left: 5%; margin-top: 5%'>
       <h3>User Stories</h3>
       <ol>
-        <li>Set the content security policies to only allow loading of scripts and css from your server.</li>
-        <li>I can <b>GET</b> <code>/api/stock-prices</code> with form data containing a Nasdaq <i>stock</i> ticker and recieve back an object <i>stockData</i>.</li>
-        <li>In <i>stockData</i>, I can see the <i>stock</i>(string, the ticker), <i>price</i>(decimal in string format), and <i>likes</i>(int).</li>
-        <li>I can also pass along field <i>like</i> as <b>true</b>(boolean) to have my like added to the stock(s). Only 1 like per ip should be accepted.</li>
-        <li>If I pass along 2 stocks, the return object will be an array with both stock's info but instead of <i>likes</i>, it will display <i>rel_likes</i>(the difference between the likes on both) on both.</li>
-        <li>A good way to receive current price is the following external API(replacing 'GOOG' with your stock): <code>https://finance.google.com/finance/info?q=NASDAQ%3aGOOG</code></li>
-        <li>All 5 functional tests are complete and passing.</li>
+        <li>Only allow your site to be loading in an iFrame on your own pages.</li>
+        <li>Do not allow DNS prefetching.</li>
+        <li>Only allow your site to send the referrer for your own pages.</li>
+        <li>I can <b>POST</b> a thread to a specific message board by passing form data <code>text</code> and <code>delete_password</code> to <i>/api/threads/{board}</i>.(Recomend res.redirect to board page /b/{board})
+        Saved will be <code>_id</code>, <code>text</code>, <code>created_on</code>(date&amp;time), <code>bumped_on</code>(date&amp;time, starts same as created_on), <code>reported</code>(boolean), <code>delete_password</code>, &amp; <code>replies</code>(array).</li>
+        <li>I can <b>POST</b> a reply to a thead on a specific board by passing form data <code>text</code>, <code>delete_password</code>, &amp; <code>thread_id</code> to <i>/api/replies/{board}</i> and it will also update the bumped_on date to the comments date.(Recomend res.redirect to thread page /b/{board}/{thread_id})
+        In the thread's 'replies' array will be saved <code>_id</code>, <code>text</code>, <code>created_on</code>, <code>delete_password</code>, &amp; <code>reported</code>.</li>
+        <li>I can <b>GET</b> an array of the most recent 10 bumped threads on the board with only the most recent 3 replies from <i>/api/threads/{board}</i>. The <code>reported</code> and <code>delete_passwords</code> fields will not be sent.</li>
+        <li>I can <b>GET</b> an entire thread with all it's replies from <i>/api/replies/{board}?thread_id={thread_id}</i>. Also hiding the same fields.</li>
+        <li>I can delete a thread completely if I send a <b>DELETE</b> request to <i>/api/threads/{board}</i> and pass along the <code>thread_id</code> &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
+        <li>I can delete a post(just changing the text to '[deleted]') if I send a <b>DELETE</b> request to <i>/api/replies/{board}</i> and pass along the <code>thread_id</code>, <code>reply_id</code>, &amp; <code>delete_password</code>. (Text response will be 'incorrect password' or 'success')</li>
+        <li>I can report a thread and change it's reported value to true by sending a <b>PUT</b> request to <i>/api/threads/{board}</i> and pass along the <code>thread_id</code>. (Text response will be 'success')</li>
+        <li>I can report a reply and change it's reported value to true by sending a <b>PUT</b> request to <i>/api/replies/{board}</i> and pass along the <code>thread_id</code> &amp; <code>reply_id</code>. (Text response will be 'success')</li>
+        <li>Complete functional tests that wholely test routes and pass.</li>
       </ol>
-      <h3>Example usage:</h3>
-      <code>/api/stock-prices?stock=goog</code><br>
-      <code>/api/stock-prices?stock=goog&amp;like=true</code><br>
-      <code>/api/stock-prices?stock=goog&amp;stock=msft</code><br>
-      <code>/api/stock-prices?stock=goog&amp;stock=msft&amp;like=true</code><br>
-      <h3>Example return:</h3>
-      <code>{"stockData":{"stock":"GOOG","price":"786.90","likes":1}}</code><br>
-      <code>{"stockData":[{"stock":"MSFT","price":"62.30","rel_likes":-1},{"stock":"GOOG","price":"786.90","rel_likes":1}]}</code>
+      <img src='https://cdn.gomix.com/8f5547a1-a0d6-48f6-aa38-51753a0105f4%2FScreen%20Shot%202017-01-02%20at%201.04.10%20AM.png'>
+      <br><br>
+      <h2><a href='/b/general/'>Go to testing <i>'/b/general/'</i> board</a></h2>
     </div>
     <hr style='margin: 50px'>
     <div id='testui' style='margin-left: 5%'>
-      <h2 style="text-align: left">Front-End:</h2>
-      <h3>Get single price and total likes</h3>
-      <form id="testForm2" class="border">
-        <input type="text" name="stock" placeholder="goog" style="width: 100px" required=''>
-        <input type="checkbox" name="like" value=true> Like?<br>
-        <button type="submit">Get Price!</button>
-      </form>
-      <h3>Compare and get relative likes</h3>
-      <form id="testForm" class="border">
-        <input type="text" name="stock" placeholder="goog" style="width: 100px" required=''>
-        <input type="text" name="stock" placeholder="msft" style="width: 100px" required=''>
-        <input type="checkbox" name="like" value=true> Like both?<br>
-        <button type="submit">Get Price!</button>
-      </form>
-      <code id='jsonResult'></code>
+      <h2 style="text-align: left">API Tests:</h2>
+        <h4>New thread (POST /api/threads/:board)</h4>
+        <form action="/api/threads/test" method="post" id="newThread">
+          <input type='text' placeholder='board' id='board1' name='board' required=''><br>
+          <textarea type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
+          <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
+          <input type="submit" value="Submit">
+        </form>
+        <hr>
+        <h4>Report thread (PUT /api/threads/:board)</h4>
+        <form id="reportThread">
+          <input type='text' placeholder='board' id='board2' name='board' required=''><br>
+          <input type='text' placeholder='id to report' name='thread_id' required=''><br>
+          <input type="submit" value="Submit">
+        </form>
+        <hr>
+        <h4>Delete thread (DELETE /api/threads/:board)</h4>
+        <form id="deleteThread">
+          <input type='text' placeholder='board' id='board3' name='board' required=''><br>
+          <input type='text' placeholder='id to delete' name='thread_id' required=''><br>
+          <input type='text' placeholder='password' name='delete_password' required=''><br>
+          <input type="submit" value="Submit">
+        </form>
+        <hr>
+        
+        
+        <h4>New reply (POST /api/replies/:board)</h4>
+        <form action="/api/threads/test" method="post" id="newReply">
+          <input type='text' placeholder='board' id='board4' name='board' required=''><br>
+          <input type='text' placeholder='thread id' name='thread_id' required=''><br>
+          <textarea type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
+          <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
+          <input type="submit" value="Submit">
+        </form>
+        <hr>
+        <h4>Report reply (PUT /api/replies/:board)</h4>
+        <form id="reportReply">
+          <input type='text' placeholder='board' id='board5' name='board' required=''><br>
+          <input type='text' placeholder='thread id' name='thread_id' required=''><br>
+          <input type='text' placeholder='id to report' name='reply_id' required=''><br>
+          <input type="submit" value="Submit">
+        </form>
+        <hr>
+        <h4>Delete reply (DELETE /api/replies/:board)</h4>
+        <form id="deleteReply">
+          <input type='text' placeholder='board' id='board6' name='board' required=''><br>
+          <input type='text' placeholder='thread id' name='thread_id' required=''><br>
+          <input type='text' placeholder='id to delete' name='reply_id' required=''><br>
+          <input type='text' placeholder='password' name='delete_password' required=''><br>
+          <input type="submit" value="Submit">
+        </form>        
     </div>
     <hr style='margin: 50px; margin-top: 200px'>
     <!-- Your web-app is https, so your scripts need to be too -->
@@ -60,24 +98,62 @@
             crossorigin="anonymous"></script>
     <script>
       $(function() {
-        $('#testForm').submit(function(e) {
+        $('#newThread').submit(function(){
+          var board = $('#board1').val();
+          $(this).attr('action', "/api/threads/" + board);
+        });
+        $('#newReply').submit(function(){
+          var board = $('#board4').val();
+          $(this).attr('action', "/api/replies/" + board);
+        });
+        $('#reportThread').submit(function(e){
+          var url = "/api/threads/"+$('#board2').val();
           $.ajax({
-            url: '/api/stock-prices',
-            type: 'get',
-            data: $('#testForm').serialize(),
-            success: function(data) {
-              $('#jsonResult').text(JSON.stringify(data));
+            type: "PUT",
+            url: url,
+            data: $(this).serialize(),
+            success: function(data)
+            {
+              alert(data);
             }
           });
           e.preventDefault();
         });
-        $('#testForm2').submit(function(e) {
+        $('#deleteThread').submit(function(e){
+          var url = "/api/threads/"+$('#board3').val();
           $.ajax({
-            url: '/api/stock-prices',
-            type: 'get',
-            data: $('#testForm2').serialize(),
-            success: function(data) {
-              $('#jsonResult').text(JSON.stringify(data));
+            type: "DELETE",
+            url: url,
+            data: $(this).serialize(),
+            success: function(data)
+            {
+              alert(data);
+            }
+          });
+          e.preventDefault();
+        });
+        $('#reportReply').submit(function(e){
+          var url = "/api/replies/"+$('#board5').val();
+          $.ajax({
+            type: "PUT",
+            url: url,
+            data: $(this).serialize(),
+            success: function(data)
+            {
+              alert(data);
+            }
+          });
+          e.preventDefault();
+        });
+        $('#deleteReply').submit(function(e){
+          var url = "/api/replies/"+$('#board6').val();
+          $.ajax({
+            type: "DELETE",
+            url: url,
+            data: $(this).serialize(),
+            success: function(data)
+            {
+              alert(data);
             }
           });
           e.preventDefault();
