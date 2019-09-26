@@ -1,7 +1,7 @@
 {
-	"name": "my-hyperdev-app",
+	"name": "fcc-library",
 	"version": "0.0.1",
-	"description": "What am I about?",
+	"description": "boilerplate",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
