@@ -1,29 +1,29 @@
 {
-	"name": "shorturl",
-	"version": "0.0.1",
-	"description": "API project for freeCodeCamp",
+	"name": "fcc-exercise-tracker",
+	"version": "0.1.0",
+	"description": "A REST API project, part of Free Code Camp's curriculum",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
 	},
 	"dependencies": {
-		"express": "^5.0.0-alpha.2",
-		"mongodb": "^2.2.5",
-		"mongoose": "^4.5.7",
+		"express": "^4.14.0",
+		"mongoose": "^4.7.2",
+		"mongodb": "^2.2.14",
+		"body-parser": "^1.15.2",
 		"cors": "^2.8.1",
-		"body-parser": "^1.15.2"
+		"shortid": "^2.2.6"
 	},
 	"engines": {
-		"node": "4.4.5"
+		"node": "6.9.1"
 	},
 	"repository": {
-		"type": "git",
-		"url": "https://hyperdev.com/#!/project/welcome-project"
+		"url": "https://gomix.com/#!/project/welcome-project"
 	},
+	"license": "MIT",
 	"keywords": [
 		"node",
-		"hyperdev",
+		"gomix",
 		"express"
-	],
-	"license": "MIT"
+	]
 }
