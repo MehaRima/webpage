@@ -1,13 +1,9 @@
+**FreeCodeCamp**- Information Security and Quality Assurance
+------
 
-# API Project: File Metadata Microservice for freeCodeCamp
+1) SET NODE_ENV to `test` without quotes
+2) Most logic will need done in `controllers/convertHandler.js` but do complete `routes/api.js`
+3) You will add any security features to `server.js`
+4) You will create all of the functional/unit tests in `tests/2_functional-tests.js` and `tests/1_unit-tests.js`
 
-###    User stories:
-1. I can submit a form that includes a file upload.
-2. The form file input field  has the "name" attribute set to "upfile". We rely on this in testing.
-3. When I submit something, I will receive the file name and size in bytes within the JSON response
 
-### Usage :
-* Go to the main page, and upload a file using the provided form.
-
-### Hint:
-* To handle the file uploading you should use the [multer](https://www.npmjs.com/package/multer) npm package.
