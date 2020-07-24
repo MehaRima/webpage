@@ -1,0 +1,14 @@
+/** This is a comment that the browser will ignore,
+* Put your CSS code into this file
+*/
+
+
+/* Use this to assign text alignment,case setting,letter spacing and color... */
+
+
+h1 {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #4CAF50;
+}
