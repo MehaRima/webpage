@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Page title/ name</title>
-</head>
+
 <body>
 
 
@@ -12,7 +10,7 @@
 </a>
 </p>
 <p align="center">
-<a href="https://github.com/username/multimedia/types" target="_blank">
+<a href="https://github.com/username/multimedia/types" target="_blank"><button style='font-size:24px'><i class="fas fa-guitar"></i></button>
  <img alt="GitHub stars" src="https://repository.io/github/under_folder/username/multimedia.svg" />
 </a>
 <a href="https://github.com/username/multimedia//releases" target="_blank">
