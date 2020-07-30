@@ -18,5 +18,6 @@ Please notify the [contribution by ](a pull request) first.
 ## License
 
 [![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
-
+ Course 2_week2
+ https://meharima.github.io/webpage/Course%202/Week_02/2_2_final_code/index.html
 
