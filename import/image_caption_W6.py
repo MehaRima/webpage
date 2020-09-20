@@ -975,31 +975,49 @@ def get_cnn_encoder():
 # So we've done it for you with the following code:
 # ```python
 # # load pre-trained model
-# reset_tf_session()
-# encoder, preprocess_for_model = get_cnn_encoder()
+#
+reset_tf_session()
+# 
+encoder, preprocess_for_model = get_cnn_encoder()
 # 
 # # extract train features
-# train_img_embeds, train_img_fns = utils.apply_model(
-#     "train2014.zip", encoder, preprocess_for_model, input_shape=(IMG_SIZE, IMG_SIZE))
-# utils.save_pickle(train_img_embeds, "train_img_embeds.pickle")
-# utils.save_pickle(train_img_fns, "train_img_fns.pickle")
+# 
+train_img_embeds, train_img_fns = utils.apply_model(
+# 
+  "train2014.zip", encoder, preprocess_for_model, input_shape=(IMG_SIZE, IMG_SIZE))
+# 
+utils.save_pickle(train_img_embeds, "train_img_embeds.pickle")
+# 
+utils.save_pickle(train_img_fns, "train_img_fns.pickle")
 # 
 # # extract validation features
-# val_img_embeds, val_img_fns = utils.apply_model(
-#     "val2014.zip", encoder, preprocess_for_model, input_shape=(IMG_SIZE, IMG_SIZE))
-# utils.save_pickle(val_img_embeds, "val_img_embeds.pickle")
-# utils.save_pickle(val_img_fns, "val_img_fns.pickle")
+# 
+val_img_embeds, val_img_fns = utils.apply_model(
+#    
+  "val2014.zip", encoder, preprocess_for_model, input_shape=(IMG_SIZE, IMG_SIZE))
+# 
+utils.save_pickle(val_img_embeds, "val_img_embeds.pickle")
+# 
+utils.save_pickle(val_img_fns, "val_img_fns.pickle")
 # 
 # # sample images for learners
-# def sample_zip(fn_in, fn_out, rate=0.01, seed=42):
-#     np.random.seed(seed)
-#     with zipfile.ZipFile(fn_in) as fin, zipfile.ZipFile(fn_out, "w") as fout:
-#         sampled = filter(lambda _: np.random.rand() < rate, fin.filelist)
-#         for zInfo in sampled:
-#             fout.writestr(zInfo, fin.read(zInfo))
+# 
+def sample_zip(fn_in, fn_out, rate=0.01, seed=42):
+#    
+np.random.seed(seed)
+#     
+with zipfile.ZipFile(fn_in) as fin, zipfile.ZipFile(fn_out, "w") as fout:
+#        
+sampled = filter(lambda _: np.random.rand() < rate, fin.filelist)
+#        
+for zInfo in sampled:
+#            
+fout.writestr(zInfo, fin.read(zInfo))
 #             
-# sample_zip("train2014.zip", "train2014_sample.zip")
-# sample_zip("val2014.zip", "val2014_sample.zip")
+# 
+sample_zip("train2014.zip", "train2014_sample.zip")
+# 
+sample_zip("val2014.zip", "val2014_sample.zip")
 # ```
 
 # In[10]:
@@ -1709,6 +1727,4 @@ apply_model_to_image_raw_bytes(open("portal-cake-10.jpg", "rb").read())
 # ! wget ...
 # apply_model_to_image_raw_bytes(open("...", "rb").read())
 
-#  Image captioning model and now can produce captions for any picture from the  Internet!
 
-About
