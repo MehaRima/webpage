@@ -1,31 +1,17 @@
 
-# coding: utf-8
 
 # # Image Captioning Final Project
-# 
 # In this final project you will define and train an image-to-caption model, that can produce descriptions for real world images!
-# 
-# <img src="images/encoder_decoder.png" style="width:70%">
-# 
-# Model architecture: CNN encoder and RNN decoder. 
-# (https://research.googleblog.com/2014/11/a-picture-is-worth-thousand-coherent.html)
-
-# # Import stuff
-
-# In[1]:
-
-
+# # Required parts
+# In[]:
 #! shred -u setup_google_colab.py! wget https://raw.githubusercontent.com/hse-aml/intro-to-dl/master/setup_google_colab.py -O setup_google_colab.pyimport setup_google_colabsetup_google_colab.setup_week6()
-
-
 # In[ ]:
 
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 # GRADING PART
--------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------
 grader = grading.Grader(assignment_key="NEDBg6CgEee8nQ6uE8a7OA", 
                         all_parts=["19Wpv", "uJh73", "yiJkt", "rbpnH", "E2OIL", "YJR7z"])
                         
@@ -913,24 +899,22 @@ class FrozenLakeEnv(MDP):
 
 
 
-# In[2]:
+# In[]:
 
 
-import sys
-sys.path.append("..")
 #import grading
+#import utils
+#import tqdm_utils
+#import grading_utils
 #import download_utils
-
-
-# In[3]:
-
-
 #download_utils.link_all_keras_resources()
 
 
 # In[4]:
 
 
+import sys
+sys.path.append("..")
 import tensorflow as tf
 from tensorflow.contrib import keras
 import numpy as np
@@ -938,7 +922,6 @@ get_ipython().magic('matplotlib inline')
 import matplotlib.pyplot as plt
 L = keras.layers
 K = keras.backend
-#import utils
 import time
 import zipfile
 import json
@@ -946,29 +929,15 @@ from collections import defaultdict
 import re
 import random
 from random import choice
-#import grading_utils
 import os
 from keras_utils import reset_tf_session
-#import tqdm_utils
 import collections
 
-
-# # Fill in your Coursera token and email
-# To successfully submit your answers to our grader, please fill in your Coursera submission token and email
-
-# In[5]:
 
 
 #grader = grading.Grader(assignment_key="NEDBg6CgEee8nQ6uE8a7OA", 
                         all_parts=["19Wpv", "uJh73", "yiJkt", "rbpnH", "E2OIL", "YJR7z"])
 
-
-# In[6]:
-
-
-# token expires every 30 min
-#COURSERA_TOKEN = "3Lcjh3xbGR11iGc5"### YOUR TOKEN HERE
-#COURSERA_EMAIL = "sahelirima23@gmail.com"### YOUR EMAIL HERE
 
 
 # # Download data
@@ -980,26 +949,15 @@ import collections
 # - validation images http://msvocds.blob.core.windows.net/coco2014/val2014.zip
 # - captions for both train and validation http://msvocds.blob.core.windows.net/annotations-1-0-3/captions_train-val2014.zip
 
-# In[7]:
-
-
-# we downloaded them for you, just link them here
-#download_utils.link_week_6_resources()
 
 
 # # Extract image features
-# 
-# We will use pre-trained InceptionV3 model for CNN encoder (https://research.googleblog.com/2016/03/train-your-own-image-classifier-with.html) and extract its last hidden layer as an embedding:
-# 
-# <img src="images/inceptionv3.png" style="width:70%">
 
-# In[8]:
-
+# In[]:
 
 IMG_SIZE = 299
 
-
-# In[9]:
+# In[]:
 
 
 # we take the last hidden layer of IncetionV3 as an image embedding
@@ -1061,7 +1019,7 @@ print(train_img_embeds.shape, len(train_img_fns))
 print(val_img_embeds.shape, len(val_img_fns))
 
 
-# In[11]:
+# In[]:
 
 
 # check prepared samples of images
@@ -1070,7 +1028,7 @@ list(filter(lambda x: x.endswith("_sample.zip"), os.listdir(".")))
 
 # # Extract captions for images
 
-# In[12]:
+# In[]:
 
 
 # extract captions from zip
@@ -1095,7 +1053,7 @@ print(len(train_img_fns), len(train_captions))
 print(len(val_img_fns), len(val_captions))
 
 
-# In[13]:
+# In[]:
 
 
 # look at training example (each has 5 captions)
@@ -1119,7 +1077,7 @@ show_trainig_example(train_img_fns, train_captions, example_idx=142)
 
 # # Prepare captions for training
 
-# In[14]:
+# In[]:
 
 
 # preview captions data
@@ -1222,7 +1180,7 @@ def caption_tokens_to_indices(captions, vocab):
     return res
 
 
-# In[16]:
+# In[]:
 
 
 # prepare vocabulary
@@ -1231,7 +1189,7 @@ vocab_inverse = {idx: w for w, idx in vocab.items()}
 print(len(vocab))
 
 
-# In[17]:
+# In[]:
 
 
 # replace tokens with indices
@@ -1243,7 +1201,7 @@ val_captions_indexed = caption_tokens_to_indices(val_captions, vocab)
 # 
 # We will crunch LSTM through all the tokens, but we will ignore padding tokens during loss calculation.
 
-# In[18]:
+# In[]:
 
 
 def batch_captions_to_matrix(batch_captions, pad_idx, max_len=None):
@@ -1284,24 +1242,6 @@ def batch_captions_to_matrix(batch_captions, pad_idx, max_len=None):
     return np.array(matrix)
 
 
-# In[19]:
-
-
-## GRADED PART, DO NOT CHANGE!
-# Vocabulary creation
-grader.set_answer("19Wpv", grading_utils.test_vocab(vocab, PAD, UNK, START, END))
-# Captions indexing
-grader.set_answer("uJh73", grading_utils.test_captions_indexing(train_captions_indexed, vocab, UNK))
-# Captions batching
-grader.set_answer("yiJkt", grading_utils.test_captions_batching(batch_captions_to_matrix))
-
-
-# In[20]:
-
-
-# you can make submission with answers so far to check yourself at this stage
-#grader.submit(COURSERA_EMAIL, COURSERA_TOKEN)
-
 
 # In[21]:
 
@@ -1322,10 +1262,9 @@ assert len(caption_tokens_to_indices(train_captions[:5], vocab)) == 5
 # During training we will feed ground truth tokens into the lstm to get predictions of next tokens. 
 # 
 # Notice that we don't need to feed last token (END) as input (http://cs.stanford.edu/people/karpathy/):
-# 
-# <img src="images/encoder_decoder_explained.png" style="width:50%">
 
-# In[22]:
+
+# In[]:
 
 
 IMG_EMBED_SIZE = train_img_embeds.shape[1]
@@ -1336,7 +1275,7 @@ LOGIT_BOTTLENECK = 120
 pad_idx = vocab[PAD]
 
 
-# In[23]:
+# In[]:
 
 
 # remember to reset your graph if you want to start building it from scratch!
@@ -1355,10 +1294,8 @@ tf.set_random_seed(42)
 # dense_layer(b)  # and again
 # ```
 
-# Here's a figure to help you with flattening in decoder:
-# <img src="images/flatten_help.jpg" style="width:80%">
 
-# In[24]:
+# In[]:
 
 
 class decoder:
@@ -1443,7 +1380,7 @@ class decoder:
     loss = tf.reduce_sum(xent*flat_loss_mask) / tf.reduce_sum(flat_loss_mask)
 
 
-# In[25]:
+# In[]:
 
 
 # define optimizer operation to minimize the loss
@@ -1458,34 +1395,18 @@ saver = tf.train.Saver()
 s.run(tf.global_variables_initializer())
 
 
-# In[26]:
-
-
-## GRADED PART, DO NOT CHANGE!
-# Decoder shapes test
-grader.set_answer("rbpnH", grading_utils.test_decoder_shapes(decoder, IMG_EMBED_SIZE, vocab, s))
-# Decoder random loss test
-grader.set_answer("E2OIL", grading_utils.test_random_decoder_loss(decoder, IMG_EMBED_SIZE, vocab, s))
-
-
-# In[27]:
-
-
-# you can make submission with answers so far to check yourself at this stage
-#grader.submit(COURSERA_EMAIL, COURSERA_TOKEN)
-
 
 # ## Training loop
 # Evaluate train and validation metrics through training and log them. Ensure that loss decreases.
 
-# In[28]:
+# In[]:
 
 
 train_captions_indexed = np.array(train_captions_indexed)
 val_captions_indexed = np.array(val_captions_indexed)
 
 
-# In[29]:
+# In[]:
 
 
 # generate batch via random sampling of images and captions for them,
@@ -1523,7 +1444,7 @@ def generate_batch(images_embeddings, indexed_captions, batch_size, max_len=None
             decoder.sentences: batch_captions_matrix}
 
 
-# In[31]:
+# In[]:
 
 
 batch_size = 64
@@ -1596,21 +1517,6 @@ for epoch in range(n_epochs):
     
 print("Finished!")
 
-
-# In[ ]:
-
-
-## GRADED PART, DO NOT CHANGE!
-# Validation loss
-grader.set_answer("YJR7z", grading_utils.test_validation_loss(
-    decoder, s, generate_batch, val_img_embeds, val_captions_indexed))
-
-
-# In[ ]:
-
-
-# you can make submission with answers so far to check yourself at this stage
-#grader.submit(COURSERA_EMAIL, COURSERA_TOKEN)
 
 
 # In[ ]:
@@ -1794,9 +1700,8 @@ download_utils.download_file(
 
 apply_model_to_image_raw_bytes(open("portal-cake-10.jpg", "rb").read())
 
+### YOUR EXAMPLES HERE ###
 
-# Now it's time to find 10 examples where your model works good and 10 examples where it fails! 
-# 
 # You can use images from validation set as follows:
 # ```python
 # show_valid_example(val_img_fns, example_idx=...)
@@ -1806,18 +1711,5 @@ apply_model_to_image_raw_bytes(open("portal-cake-10.jpg", "rb").read())
 # ```python
 # ! wget ...
 # apply_model_to_image_raw_bytes(open("...", "rb").read())
-# ```
-# 
-# If you use these functions, the output will be embedded into your notebook and will be visible during peer review!
-# 
-# When you're done, download your noteboook using "File" -> "Download as" -> "Notebook" and prepare that file for peer review!
 
-# In[ ]:
-
-
-### YOUR EXAMPLES HERE ###
-
-
-# That's it! 
-# 
-# Congratulations, you've trained your image captioning model and now can produce captions for any picture from the  Internet!
+#  Image captioning model and now can produce captions for any picture from the  Internet!
