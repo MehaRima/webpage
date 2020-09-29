@@ -3,6 +3,8 @@
 
 #### Project links
 
+Beta test version : [Files](https://github.com/MehaRima/webpage/blob/master/CySiB2DTShOkogdg04oTBw_3da3257abce14716ad44236a722d1185_Leading-Motivating-and-Controlling-Assignment-Rubric.pdf)
+
 TinkerCAD 1 link : https://www.tinkercad.com/things/710UjdsP9in			
 
 TinkerCAD 2 link : https://www.tinkercad.com/things/961nzeJWi8i    
